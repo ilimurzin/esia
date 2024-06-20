@@ -10,6 +10,7 @@ use Esia\Signer\Exceptions\NoSuchKeyFileException;
 use Esia\Signer\Exceptions\NoSuchTmpDirException;
 use Esia\Signer\Exceptions\SignFailException;
 use Esia\Signer\SignerPKCS7;
+use PHPUnit\Util\ErrorHandler;
 
 /**
  * Class SignerPKCS7Test
@@ -111,7 +112,9 @@ class SignerPKCS7Test extends Unit
         );
 
         $this->expectException(CannotReadCertificateException::class);
-        $signer->sign('test');
+        ErrorHandler::invokeIgnoringWarnings(static function () use ($signer) {
+            $signer->sign('test');
+        });
     }
 
     /**
