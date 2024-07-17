@@ -11,12 +11,16 @@ final class CliCryptoProSigner implements SignerInterface
     private $thumbprint;
     private $pin;
     private $tempDir;
+    private $proxy;
+    private $timeout;
 
     public function __construct(
         string $toolPath,
         string $thumbprint,
         ?string $pin = null,
-        ?string $tempDir = null
+        ?string $tempDir = null,
+        ?string $proxy = null,
+        ?int $timeout = null
     ) {
         $this->toolPath = $toolPath;
         $this->thumbprint = $thumbprint;
@@ -29,6 +33,9 @@ final class CliCryptoProSigner implements SignerInterface
         if (!is_writable($this->tempDir)) {
             throw new NoSuchTmpDirException('Temporary folder is not writable');
         }
+
+        $this->proxy = $proxy;
+        $this->timeout = $timeout;
     }
 
     public function sign(string $message): string
@@ -53,9 +60,21 @@ final class CliCryptoProSigner implements SignerInterface
         }
         $command .= " $tempPath";
 
+        if ($this->timeout) {
+            $command = "timeout $this->timeout " . $command;
+        }
+
+        if ($this->proxy) {
+            $command = "export http_proxy=$this->proxy && " . $command;
+        }
+
         $output = null;
         $resultCode = null;
         exec($command, $output, $resultCode);
+
+        if ($resultCode === 124) {
+            throw new SignFailException('Signing timeout');
+        }
 
         if ($resultCode !== 0) {
             throw new SignFailException('Failure signing: ' . implode("\n", $output));
