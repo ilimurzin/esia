@@ -1,7 +1,7 @@
 
 # Единая система идентификации и аутентификации (ЕСИА) OpenId 
 
-[![Build Status](https://github.com/fr05t1k/esia/actions/workflows/tests.yml/badge.svg)](https://github.com/fr05t1k/esia/actions/workflows/tests.yml)
+[![Build Status](https://github.com/ilimurzin/esia/actions/workflows/tests.yml/badge.svg)](https://github.com/ilimurzin/esia/actions/workflows/tests.yml)
 
 # Описание
 Компонент для авторизации на портале "Госуслуги".
