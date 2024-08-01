@@ -1,0 +1,33 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0']
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup GOST engine
+      run: |
+        sudo apt install libengine-gost-openssl1.1
+        sudo bash tests/.configure-gost-openssl.sh
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      run: composer update --prefer-dist --no-progress
+
+    - name: Run test suite
+      run: |
+        chmod 000 tests/_data/non_readable_file
+        php vendor/codeception/codeception/codecept run
