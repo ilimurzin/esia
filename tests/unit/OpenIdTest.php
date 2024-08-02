@@ -156,6 +156,13 @@ class OpenIdTest extends Unit
         self::assertSame([['phone' => '555 555 555'], ['email' => 'test@gmail.com']], $info);
     }
 
+    public function testBuildUrl(): void
+    {
+        $state = '47e1f1e9-8b56-4666-ac02-d1408408e5f2';
+        $url = $this->openId->buildUrl($state);
+        self::assertStringContainsString($state, $url);
+    }
+
     /**
      * @throws InvalidConfigurationException
      */

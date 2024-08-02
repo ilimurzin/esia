@@ -87,10 +87,10 @@ class OpenId
      * @return string|false
      * @throws SignFailException
      */
-    public function buildUrl()
+    public function buildUrl(string $state = null)
     {
         $timestamp = $this->getTimeStamp();
-        $state = $this->buildState();
+        $state = $state ?? $this->buildState();
         $message = $this->config->getScopeString()
             . $timestamp
             . $this->config->getClientId()
