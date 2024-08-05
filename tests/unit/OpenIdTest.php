@@ -163,6 +163,14 @@ class OpenIdTest extends Unit
         self::assertStringContainsString($state, $url);
     }
 
+    public function testPassAdditionalParams(): void
+    {
+        $url = $this->openId->buildUrl(null, [
+            'person_filter' => base64_encode('conf_acc'),
+        ]);
+        self::assertStringContainsString('person_filter=Y29uZl9hY2M%3D', $url);
+    }
+
     /**
      * @throws InvalidConfigurationException
      */
