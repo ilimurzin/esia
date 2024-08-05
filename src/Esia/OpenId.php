@@ -87,7 +87,7 @@ class OpenId
      * @return string|false
      * @throws SignFailException
      */
-    public function buildUrl(string $state = null)
+    public function buildUrl(string $state = null, array $additionalParams = [])
     {
         $timestamp = $this->getTimeStamp();
         $state = $state ?? $this->buildState();
@@ -110,6 +110,10 @@ class OpenId
             'access_type' => $this->config->getAccessType(),
             'timestamp' => $timestamp,
         ];
+
+        if ($additionalParams) {
+            $params = array_merge($params, $additionalParams);
+        }
 
         $request = http_build_query($params);
 
