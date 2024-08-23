@@ -28,6 +28,4 @@ jobs:
       run: composer update --prefer-dist --no-progress
 
     - name: Run test suite
-      run: |
-        chmod 000 tests/_data/non_readable_file
-        php vendor/codeception/codeception/codecept run
+      run: composer test
