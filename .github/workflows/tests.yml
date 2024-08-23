@@ -14,7 +14,7 @@ jobs:
     - name: Setup GOST engine
       run: |
         sudo apt install libengine-gost-openssl1.1
-        sudo bash tests/.configure-gost-openssl.sh
+        sudo cp tests/openssl.cnf /usr/lib/ssl/openssl.cnf
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2

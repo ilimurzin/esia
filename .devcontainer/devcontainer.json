@@ -9,5 +9,5 @@
       "packages": "libengine-gost-openssl1.1"
     }
   },
-  "onCreateCommand": "sudo cp .devcontainer/openssl.cnf /usr/lib/ssl/openssl.cnf"
+  "onCreateCommand": "sudo cp tests/openssl.cnf /usr/lib/ssl/openssl.cnf"
 }
