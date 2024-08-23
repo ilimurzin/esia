@@ -70,24 +70,6 @@ class ConfigTest extends Unit
                 ],
                 null,
             ],
-            'No cert path' => [
-                [
-                    'clientId' => 'test',
-                    'redirectUrl' => 'http://google.com',
-                    'privateKeyPath' => '/tmp',
-                    'scope' => ['test', 'test2', 'test3'],
-                ],
-                InvalidConfigurationException::class,
-            ],
-            'No private key path' => [
-                [
-                    'clientId' => 'test',
-                    'redirectUrl' => 'http://google.com',
-                    'certPath' => '/tmp',
-                    'scope' => ['test', 'test2', 'test3'],
-                ],
-                InvalidConfigurationException::class,
-            ],
             'No redirect url' => [
                 [
                     'clientId' => 'test',
