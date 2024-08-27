@@ -18,7 +18,7 @@
     }
   },
   "require": {
-    "php": "^7.1 || ^8.0",
+    "php": "^8.0",
     "guzzlehttp/guzzle": "^6.1.0 || ^7.0",
     "psr/log": "^1.0 || ^2.0 || ^3.0",
     "psr/http-message": "^1.0 || ^2.0",
@@ -29,11 +29,14 @@
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
-    "codeception/codeception": "^4.0",
-    "codeception/module-asserts": "^1.3"
+    "codeception/codeception": "^4.2.2",
+    "codeception/module-asserts": "^1.3.1",
+    "phpstan/phpstan": "^1.12.9",
+    "webmasterskaya/crypto-pro-php-stubs": "^1.0.5"
   },
   "scripts": {
-    "test": "chmod 000 tests/_data/non_readable_file && vendor/bin/codecept run && chmod 644 tests/_data/non_readable_file"
+    "test": "chmod 000 tests/_data/non_readable_file && vendor/bin/codecept run && chmod 644 tests/_data/non_readable_file",
+    "phpstan": "vendor/bin/phpstan"
   },
   "config": {
     "lock": false
