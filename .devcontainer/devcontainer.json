@@ -2,7 +2,7 @@
   "image": "mcr.microsoft.com/devcontainers/base:1-ubuntu-20.04",
   "features": {
     "ghcr.io/shyim/devcontainers-features/php:0.1.2": {
-      "version": "7.1",
+      "version": "8.0",
       "extensionsExtra": "mbstring xdebug"
     },
     "ghcr.io/devcontainers-contrib/features/apt-get-packages:1": {
