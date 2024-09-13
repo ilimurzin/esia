@@ -1,5 +1,2 @@
-.idea
-tests/tmp/*
-tests/_output/*
-public/*
-vendor
+/tests/_output/*
+/vendor
