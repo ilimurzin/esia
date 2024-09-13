@@ -48,7 +48,7 @@ class OpenId
      */
     private $config;
 
-    public function __construct(Config $config, ClientInterface $client = null)
+    public function __construct(Config $config, ?ClientInterface $client = null)
     {
         $this->config = $config;
         $this->client = $client ?? new GuzzleHttpClient(new Client());
@@ -87,7 +87,7 @@ class OpenId
      * @return string|false
      * @throws SignFailException
      */
-    public function buildUrl(string $state = null, array $additionalParams = [])
+    public function buildUrl(?string $state = null, array $additionalParams = [])
     {
         $timestamp = $this->getTimeStamp();
         $state = $state ?? $this->buildState();
@@ -123,7 +123,7 @@ class OpenId
     /**
      * Return an url for logout
      */
-    public function buildLogoutUrl(string $redirectUrl = null): string
+    public function buildLogoutUrl(?string $redirectUrl = null): string
     {
         $url = $this->config->getLogoutUrl() . '?%s';
         $params = [

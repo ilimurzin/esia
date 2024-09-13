@@ -107,7 +107,7 @@ class ConfigTest extends Unit
      *
      * @dataProvider dataProviderForConstructor
      */
-    public function testConstruct($config, string $expectedException = null): void
+    public function testConstruct($config, ?string $expectedException = null): void
     {
         if ($expectedException) {
             $this->expectException($expectedException);
