@@ -156,6 +156,22 @@ class OpenIdTest extends Unit
         self::assertSame([['phone' => '555 555 555'], ['email' => 'test@gmail.com']], $info);
     }
 
+    public function testGetRoles(): void
+    {
+        $config = new Config($this->config);
+        $oid = '123';
+        $config->setOid($oid);
+        $config->setToken('test');
+
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"stateFacts":["hasSize"],"size":2,"elements":[{"oid":1002416012,"prnOid":1000719157,"fullName":"Индивидуальный предприниматель Илимурзин Владимир Андреевич","shortName":"ИП Илимурзин В. А.","ogrn":"319290100017299","type":"BUSINESS","chief":true,"admin":false,"active":true,"hasRightOfSubstitution":true,"hasApprovalTabAccess":false,"isLiquidated":false},{"oid":1000547703,"prnOid":1000719157,"fullName":"Индивидуальный предприниматель Иванов Иван Иванович","shortName":"ИП Иванов И. И.","ogrn":"312344215554346","type":"BUSINESS","chief":false,"admin":true,"email":"ilimurzin@ya.ru","active":true,"hasRightOfSubstitution":false,"hasApprovalTabAccess":false,"isLiquidated":false}]}'),
+        ]);
+        $openId = new OpenId($config, $client);
+
+        $roles = $openId->getRoles();
+        self::assertTrue($roles[0]['oid'] === 1002416012);
+    }
+
     public function testBuildUrl(): void
     {
         $state = '47e1f1e9-8b56-4666-ac02-d1408408e5f2';

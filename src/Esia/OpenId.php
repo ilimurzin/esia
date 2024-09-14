@@ -274,6 +274,16 @@ class OpenId
         return $payload;
     }
 
+    public function getRoles(): array
+    {
+        return $this->sendRequest(
+            new Request(
+                'GET',
+                $this->config->getPersonUrl() . '/roles'
+            )
+        )['elements'] ?? [];
+    }
+
     /**
      * This method can iterate on each element
      * and fetch entities from esia by url
