@@ -44,12 +44,10 @@ class OpenIdCliOpensslTest extends OpenIdTest
     public function testGetToken(): void
     {
         $config = new Config($this->config);
-
         $oid = '123';
-        $oidBase64 = base64_encode('{ "urn:esia:sbj_id" : ' . $oid . '}');
-
+        $oidBase64 = base64_encode('{"urn:esia:sbj_id" : ' . $oid . '}');
         $client = $this->buildClientWithResponses([
-            new Response(200, [], '{ "access_token": "test.' . $oidBase64 . '.test"}'),
+            new Response(200, [], '{"access_token": "test.' . $oidBase64 . '.test", "refresh_token":"not_important"}'),
         ]);
         $openId = new OpenId($config, $client);
         $openId->setSigner(new CliSignerPKCS7(
@@ -58,9 +56,31 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['privateKeyPassword'],
             $this->config['tmpPath']
         ));
+
         $token = $openId->getToken('test');
+
         self::assertNotEmpty($token);
         self::assertSame($oid, $openId->getConfig()->getOid());
     }
 
+    public function testGetTokenRememberRefreshToken(): void
+    {
+        $config = new Config($this->config);
+
+        $refreshToken = 'remember?';
+
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "' . $refreshToken . '"}'),
+        ]);
+        $openId = new OpenId($config, $client);
+        $openId->setSigner(new CliSignerPKCS7(
+            $this->config['certPath'],
+            $this->config['privateKeyPath'],
+            $this->config['privateKeyPassword'],
+            $this->config['tmpPath']
+        ));
+
+        $openId->getToken('test');
+        self::assertSame($refreshToken, $openId->getConfig()->getRefreshToken());
+    }
 }

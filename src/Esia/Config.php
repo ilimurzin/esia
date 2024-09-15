@@ -35,6 +35,7 @@ class Config
     private $accessType = 'offline';
 
     private $token = '';
+    private $refreshToken = '';
     private $oid = '';
 
     /**
@@ -95,7 +96,7 @@ class Config
     {
         return $this->certPath;
     }
-    
+
     public function getOid(): string
     {
         return $this->oid;
@@ -139,6 +140,16 @@ class Config
     public function setToken(string $token): void
     {
         $this->token = $token;
+    }
+
+    public function setRefreshToken(string $refreshToken): void
+    {
+        $this->refreshToken = $refreshToken;
+    }
+
+    public function getRefreshToken(): string
+    {
+        return $this->refreshToken;
     }
 
     public function getClientId(): string

@@ -52,18 +52,32 @@ class OpenIdTest extends Unit
     public function testGetToken(): void
     {
         $config = new Config($this->config);
-
         $oid = '123';
-        $oidBase64 = base64_encode('{ "urn:esia:sbj_id" : ' . $oid . '}');
-
+        $oidBase64 = base64_encode('{"urn:esia:sbj_id" : ' . $oid . '}');
         $client = $this->buildClientWithResponses([
-            new Response(200, [], '{ "access_token": "test.' . $oidBase64 . '.test"}'),
+            new Response(200, [], '{"access_token": "test.' . $oidBase64 . '.test", "refresh_token": "not_important"}'),
         ]);
         $openId = new OpenId($config, $client);
 
         $token = $openId->getToken('test');
+
         self::assertNotEmpty($token);
         self::assertSame($oid, $openId->getConfig()->getOid());
+    }
+
+    public function testGetTokenRememberRefreshToken(): void
+    {
+        $config = new Config($this->config);
+
+        $refreshToken = 'remember?';
+
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "' . $refreshToken . '"}'),
+        ]);
+        $openId = new OpenId($config, $client);
+
+        $openId->getToken('test');
+        self::assertSame($refreshToken, $openId->getConfig()->getRefreshToken());
     }
 
     /**
@@ -164,7 +178,10 @@ class OpenIdTest extends Unit
         $config->setToken('test');
 
         $client = $this->buildClientWithResponses([
-            new Response(200, [], '{"stateFacts":["hasSize"],"size":2,"elements":[{"oid":1002416012,"prnOid":1000719157,"fullName":"Индивидуальный предприниматель Илимурзин Владимир Андреевич","shortName":"ИП Илимурзин В. А.","ogrn":"319290100017299","type":"BUSINESS","chief":true,"admin":false,"active":true,"hasRightOfSubstitution":true,"hasApprovalTabAccess":false,"isLiquidated":false},{"oid":1000547703,"prnOid":1000719157,"fullName":"Индивидуальный предприниматель Иванов Иван Иванович","shortName":"ИП Иванов И. И.","ogrn":"312344215554346","type":"BUSINESS","chief":false,"admin":true,"email":"ilimurzin@ya.ru","active":true,"hasRightOfSubstitution":false,"hasApprovalTabAccess":false,"isLiquidated":false}]}'),
+            new Response(200, [], <<<'JSON'
+{"stateFacts":["hasSize"],"size":2,"elements":[{"oid":1002416012,"prnOid":1000719157,"fullName":"Индивидуальный предприниматель Илимурзин Владимир Андреевич","shortName":"ИП Илимурзин В. А.","ogrn":"319290100017299","type":"BUSINESS","chief":true,"admin":false,"active":true,"hasRightOfSubstitution":true,"hasApprovalTabAccess":false,"isLiquidated":false},{"oid":1000547703,"prnOid":1000719157,"fullName":"Индивидуальный предприниматель Иванов Иван Иванович","shortName":"ИП Иванов И. И.","ogrn":"312344215554346","type":"BUSINESS","chief":false,"admin":true,"email":"ilimurzin@ya.ru","active":true,"hasRightOfSubstitution":false,"hasApprovalTabAccess":false,"isLiquidated":false}]}
+JSON
+            ),
         ]);
         $openId = new OpenId($config, $client);
 
