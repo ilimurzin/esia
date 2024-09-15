@@ -167,7 +167,55 @@ class OpenId
             'scope' => $this->config->getScopeString(),
             'timestamp' => $timestamp,
             'token_type' => 'Bearer',
-            'refresh_token' => $state,
+        ];
+
+        $payload = $this->sendRequest(
+            new Request(
+                'POST',
+                $this->config->getTokenUrl(),
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                http_build_query($body)
+            )
+        );
+
+        $this->logger->debug('Payload: ', $payload);
+
+        $token = $payload['access_token'];
+        $this->config->setToken($token);
+        $this->config->setRefreshToken($payload['refresh_token']);
+
+        # get object id from token
+        $chunks = explode('.', $token);
+        $payload = json_decode($this->base64UrlSafeDecode($chunks[1]), true);
+        $this->config->setOid($payload['urn:esia:sbj_id']);
+
+        return $token;
+    }
+
+    public function refreshToken(): string
+    {
+        $timestamp = $this->getTimeStamp();
+        $state = $this->buildState();
+
+        $clientSecret = $this->signer->sign(
+            $this->config->getScopeString()
+            . $timestamp
+            . $this->config->getClientId()
+            . $state
+        );
+
+        $body = [
+            'client_id' => $this->config->getClientId(),
+            'grant_type' => 'refresh_token',
+            'client_secret' => $clientSecret,
+            'state' => $state,
+            'redirect_uri' => $this->config->getRedirectUrl(),
+            'scope' => $this->config->getScopeString(),
+            'timestamp' => $timestamp,
+            'token_type' => 'Bearer',
+            'refresh_token' => $this->config->getRefreshToken(),
         ];
 
         $payload = $this->sendRequest(

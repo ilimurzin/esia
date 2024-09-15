@@ -80,6 +80,36 @@ class OpenIdTest extends Unit
         self::assertSame($refreshToken, $openId->getConfig()->getRefreshToken());
     }
 
+    public function testRefreshToken(): void
+    {
+        $config = new Config($this->config);
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "first"}'),
+        ]);
+        $openId = new OpenId($config, $client);
+
+        $openId->refreshToken();
+
+        self::assertSame('first', $openId->getConfig()->getRefreshToken());
+    }
+
+    public function testMultipleRefreshToken(): void
+    {
+        $config = new Config($this->config);
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "first"}'),
+            new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "second"}'),
+        ]);
+        $openId = new OpenId($config, $client);
+
+        $openId->refreshToken();
+        $first = $openId->getConfig()->getRefreshToken();
+        $openId->refreshToken();
+        $second = $openId->getConfig()->getRefreshToken();
+
+        self::assertSame(['first','second'], [$first, $second]);
+    }
+
     /**
      * @throws InvalidConfigurationException
      * @throws AbstractEsiaException
