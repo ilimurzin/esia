@@ -148,4 +148,28 @@ class OpenIdCliOpensslTest extends OpenIdTest
 
         self::assertNotEmpty($token);
     }
+
+    public function testGetOrganizations(): void
+    {
+        $config = new Config($this->config);
+        $oid = '123';
+        $config->setOid($oid);
+        $config->setToken('test');
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"stateFacts":["hasSize"],"size":1,"elements":["https://esia-portal1.test.gosuslugi.ru/rs/orgs/1002416012"]}'),
+            new Response(200, [], '{"access_token": "client_credentials_token"}'),
+            new Response(200, [], '{"stateFacts":["Identifiable"],"oid":1002416012,"ogrn":"319290100017299","inn":"290136958241","leg":"","isLiquidated":false,"eTag":"656620472844B6421FE4DA6DFAD521755158F9E4"}'),
+        ]);
+        $openId = new OpenId($config, $client);
+        $openId->setSigner(new CliSignerPKCS7(
+            $this->config['certPath'],
+            $this->config['privateKeyPath'],
+            $this->config['privateKeyPassword'],
+            $this->config['tmpPath']
+        ));
+
+        $organizations = $openId->getOrganizations(['org_ogrn', 'org_inn']);
+
+        self::assertTrue($organizations[0]['oid'] === 1002416012);
+    }
 }

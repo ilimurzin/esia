@@ -380,6 +380,47 @@ class OpenId
         )['elements'] ?? [];
     }
 
+    public function getOrganizations(array $scopes): array
+    {
+        $urls = $this->sendRequest(
+            new Request(
+                'GET',
+                $this->config->getPersonUrl() . '/orgs'
+            )
+        )['elements'] ?? [];
+
+        $scopesForToken = [];
+
+        foreach ($urls as $url) {
+            $matches = [];
+            preg_match('/\/rs\/orgs\/(\d+)/', $url, $matches);
+            $orgOid = $matches[1];
+            if (!$orgOid) {
+                throw new \RuntimeException('wrong ESIA answer');
+            }
+
+            foreach ($scopes as $scope) {
+                $scopesForToken[] = "$scope?org_oid=$orgOid";
+            }
+        }
+
+        $token = $this->getTokenWithClientCredentials($scopesForToken);
+
+        $organizations = [];
+
+        foreach ($urls as $url) {
+            $organizations[] = $this->sendRequest(
+                new Request(
+                    'GET',
+                    $url
+                ),
+                $token
+            );
+        }
+
+        return $organizations;
+    }
+
     /**
      * This method can iterate on each element
      * and fetch entities from esia by url
@@ -403,12 +444,13 @@ class OpenId
     /**
      * @throws AbstractEsiaException
      */
-    private function sendRequest(RequestInterface $request): array
+    private function sendRequest(RequestInterface $request, ?string $token = null): array
     {
         try {
-            if ($this->config->getToken()) {
+            $token = $token ?? $this->config->getToken() ?? null;
+            if ($token) {
                 /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-                $request = $request->withHeader('Authorization', 'Bearer ' . $this->config->getToken());
+                $request = $request->withHeader('Authorization', 'Bearer ' . $token);
             }
             $response = $this->client->sendRequest($request);
             $responseBody = json_decode($response->getBody()->getContents(), true);
