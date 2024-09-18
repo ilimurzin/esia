@@ -110,6 +110,23 @@ class OpenIdTest extends Unit
         self::assertSame(['first','second'], [$first, $second]);
     }
 
+    public function testGetTokenWithClientCredentials(): void
+    {
+        $config = new Config($this->config);
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"access_token": "not_empty"}'),
+        ]);
+        $openId = new OpenId($config, $client);
+
+        $token = $openId->getTokenWithClientCredentials([
+            'org_shortname?org_oid=1002416012',
+            'org_ogrn?org_oid=1002416012',
+            'org_inn?org_oid=1002416012',
+        ]);
+
+        self::assertNotEmpty($token);
+    }
+
     /**
      * @throws InvalidConfigurationException
      * @throws AbstractEsiaException

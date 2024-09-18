@@ -243,6 +243,53 @@ class OpenId
         return $token;
     }
 
+    public function getTokenWithClientCredentials(array $scopes): string
+    {
+        $timestamp = $this->getTimeStamp();
+        $state = $this->buildState();
+
+        $scopes = array_map(
+            static function ($scope) {
+                return "http://esia.gosuslugi.ru/$scope";
+            },
+            $scopes
+        );
+        $scope = implode(' ', $scopes);
+
+        $clientSecret = $this->signer->sign(
+            $scope
+            . $timestamp
+            . $this->config->getClientId()
+            . $state
+        );
+
+        $body = [
+            'client_id' => $this->config->getClientId(),
+            'response_type' => 'token',
+            'grant_type' => 'client_credentials',
+            'client_secret' => $clientSecret,
+            'state' => $state,
+            'scope' => $scope,
+            'timestamp' => $timestamp,
+            'token_type' => 'Bearer',
+        ];
+
+        $payload = $this->sendRequest(
+            new Request(
+                'POST',
+                $this->config->getTokenUrl(),
+                [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ],
+                http_build_query($body)
+            )
+        );
+
+        $this->logger->debug('Payload: ', $payload);
+
+        return $payload['access_token'];
+    }
+
     /**
      * Fetch person info from current person
      *
