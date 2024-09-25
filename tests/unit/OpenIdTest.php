@@ -6,6 +6,7 @@ use Codeception\Test\Unit;
 use Esia\Config;
 use Esia\Exceptions\AbstractEsiaException;
 use Esia\Exceptions\InvalidConfigurationException;
+use Esia\Exceptions\OrgOidNotFoundInUrlException;
 use Esia\Http\GuzzleHttpClient;
 use Esia\OpenId;
 use Esia\Signer\Exceptions\SignFailException;
@@ -252,6 +253,24 @@ JSON
         $organizations = $openId->getOrganizations(['org_ogrn', 'org_inn']);
 
         self::assertTrue($organizations[0]['oid'] === 1002416012);
+    }
+
+    public function testGetOrganizationsThrowOrgOidNotFoundInUrl(): void
+    {
+        $config = new Config($this->config);
+        $oid = '123';
+        $config->setOid($oid);
+        $config->setToken('test');
+        $client = $this->buildClientWithResponses([
+            new Response(200, [], '{"stateFacts":["hasSize"],"size":1,"elements":["https://esia-portal1.test.gosuslugi.ru/rs/orgs/"]}'),
+            new Response(200, [], '{"access_token": "client_credentials_token"}'),
+            new Response(200, [], '{"stateFacts":["Identifiable"],"oid":1002416012,"ogrn":"319290100017299","inn":"290136958241","leg":"","isLiquidated":false,"eTag":"656620472844B6421FE4DA6DFAD521755158F9E4"}'),
+        ]);
+        $openId = new OpenId($config, $client);
+
+        self::expectException(OrgOidNotFoundInUrlException::class);
+
+        $openId->getOrganizations(['org_ogrn', 'org_inn']);
     }
 
     public function testBuildUrl(): void

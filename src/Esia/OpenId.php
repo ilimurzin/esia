@@ -4,6 +4,7 @@ namespace Esia;
 
 use Esia\Exceptions\AbstractEsiaException;
 use Esia\Exceptions\ForbiddenException;
+use Esia\Exceptions\OrgOidNotFoundInUrlException;
 use Esia\Exceptions\RequestFailException;
 use Esia\Http\GuzzleHttpClient;
 use Esia\Signer\Exceptions\CannotGenerateRandomIntException;
@@ -394,9 +395,9 @@ class OpenId
         foreach ($urls as $url) {
             $matches = [];
             preg_match('/\/rs\/orgs\/(\d+)/', $url, $matches);
-            $orgOid = $matches[1];
+            $orgOid = $matches[1] ?? null;
             if (!$orgOid) {
-                throw new \RuntimeException('wrong ESIA answer');
+                throw new OrgOidNotFoundInUrlException();
             }
 
             foreach ($scopes as $scope) {
