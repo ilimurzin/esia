@@ -51,7 +51,7 @@ class SignerPKCS7 extends AbstractSignerPKCS7 implements SignerInterface
             $cert,
             $privateKey,
             [],
-            $this->pkcs7Flags
+            $this->pkcs7Flags,
         );
 
         if ($signResult) {

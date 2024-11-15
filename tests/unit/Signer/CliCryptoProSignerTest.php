@@ -10,7 +10,7 @@ class CliCryptoProSignerTest extends \Codeception\Test\Unit
     {
         $signer = new CliCryptoProSigner(
             '/opt/cprocsp/bin/amd64/cryptcp',
-            '66821344ce484aceb984d887b303544bfdda8ea4'
+            '66821344ce484aceb984d887b303544bfdda8ea4',
         );
 
         // we expect exception here, because we can't install cryptcp to ci 🤷
@@ -26,7 +26,7 @@ class CliCryptoProSignerTest extends \Codeception\Test\Unit
             '/opt/cprocsp/bin/amd64/cryptcp',
             '66821344ce484aceb984d887b303544bfdda8ea4',
             null,
-            '/'
+            '/',
         );
     }
 
@@ -38,7 +38,7 @@ class CliCryptoProSignerTest extends \Codeception\Test\Unit
             '/opt/cprocsp/bin/amd64/cryptcp',
             '66821344ce484aceb984d887b303544bfdda8ea4',
             null,
-            codecept_log_dir('non_writable_directory')
+            codecept_log_dir('non_writable_directory'),
         );
     }
 }

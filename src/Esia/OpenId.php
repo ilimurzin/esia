@@ -58,7 +58,7 @@ class OpenId
             $config->getCertPath(),
             $config->getPrivateKeyPath(),
             $config->getPrivateKeyPassword(),
-            $config->getTmpPath()
+            $config->getTmpPath(),
         );
     }
 
@@ -155,7 +155,7 @@ class OpenId
             $this->config->getScopeString()
             . $timestamp
             . $this->config->getClientId()
-            . $state
+            . $state,
         );
 
         $body = [
@@ -177,8 +177,8 @@ class OpenId
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
-                http_build_query($body)
-            )
+                http_build_query($body),
+            ),
         );
 
         $this->logger->debug('Payload: ', $payload);
@@ -204,7 +204,7 @@ class OpenId
             $this->config->getScopeString()
             . $timestamp
             . $this->config->getClientId()
-            . $state
+            . $state,
         );
 
         $body = [
@@ -226,8 +226,8 @@ class OpenId
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
-                http_build_query($body)
-            )
+                http_build_query($body),
+            ),
         );
 
         $this->logger->debug('Payload: ', $payload);
@@ -253,7 +253,7 @@ class OpenId
             static function ($scope) {
                 return "http://esia.gosuslugi.ru/$scope";
             },
-            $scopes
+            $scopes,
         );
         $scope = implode(' ', $scopes);
 
@@ -261,7 +261,7 @@ class OpenId
             $scope
             . $timestamp
             . $this->config->getClientId()
-            . $state
+            . $state,
         );
 
         $body = [
@@ -282,8 +282,8 @@ class OpenId
                 [
                     'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
-                http_build_query($body)
-            )
+                http_build_query($body),
+            ),
         );
 
         $this->logger->debug('Payload: ', $payload);
@@ -376,8 +376,8 @@ class OpenId
         return $this->sendRequest(
             new Request(
                 'GET',
-                $this->config->getPersonUrl() . '/roles'
-            )
+                $this->config->getPersonUrl() . '/roles',
+            ),
         )['elements'] ?? [];
     }
 
@@ -386,8 +386,8 @@ class OpenId
         $urls = $this->sendRequest(
             new Request(
                 'GET',
-                $this->config->getPersonUrl() . '/orgs'
-            )
+                $this->config->getPersonUrl() . '/orgs',
+            ),
         )['elements'] ?? [];
 
         $scopesForToken = [];
@@ -413,9 +413,9 @@ class OpenId
             $organizations[] = $this->sendRequest(
                 new Request(
                     'GET',
-                    $url
+                    $url,
                 ),
-                $token
+                $token,
             );
         }
 
@@ -461,8 +461,8 @@ class OpenId
                     sprintf(
                         'Cannot decode response body. JSON error (%d): %s',
                         json_last_error(),
-                        json_last_error_msg()
-                    )
+                        json_last_error_msg(),
+                    ),
                 );
             }
 
@@ -511,7 +511,7 @@ class OpenId
                 random_int(0, 0x3fff) | 0x8000,
                 random_int(0, 0xffff),
                 random_int(0, 0xffff),
-                random_int(0, 0xffff)
+                random_int(0, 0xffff),
             );
         } catch (Exception $e) {
             throw new CannotGenerateRandomIntException('Cannot generate random integer', 0, $e);

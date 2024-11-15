@@ -34,7 +34,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
     }
 
@@ -55,7 +55,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
 
         $token = $openId->getToken('test');
@@ -78,7 +78,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
 
         $openId->getToken('test');
@@ -96,7 +96,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
 
         $openId->refreshToken();
@@ -116,7 +116,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
 
         $openId->refreshToken();
@@ -138,7 +138,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
 
         $token = $openId->getTokenWithClientCredentials([
@@ -166,7 +166,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
 
         $organizations = $openId->getOrganizations(['org_ogrn', 'org_inn']);
@@ -190,7 +190,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['certPath'],
             $this->config['privateKeyPath'],
             $this->config['privateKeyPassword'],
-            $this->config['tmpPath']
+            $this->config['tmpPath'],
         ));
 
         self::expectException(OrgOidNotFoundInUrlException::class);

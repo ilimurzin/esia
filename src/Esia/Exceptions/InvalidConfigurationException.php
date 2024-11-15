@@ -2,6 +2,4 @@
 
 namespace Esia\Exceptions;
 
-class InvalidConfigurationException extends AbstractEsiaException
-{
-}
+class InvalidConfigurationException extends AbstractEsiaException {}
