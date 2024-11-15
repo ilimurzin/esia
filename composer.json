@@ -32,11 +32,19 @@
     "codeception/codeception": "^4.2.2",
     "codeception/module-asserts": "^1.3.1",
     "phpstan/phpstan": "^1.12.9",
-    "webmasterskaya/crypto-pro-php-stubs": "^1.0.5"
+    "webmasterskaya/crypto-pro-php-stubs": "^1.0.5",
+    "rector/rector": "^1.2"
   },
   "scripts": {
     "test": "chmod 000 tests/_data/non_readable_file && vendor/bin/codecept run && chmod 644 tests/_data/non_readable_file",
-    "phpstan": "vendor/bin/phpstan"
+    "phpstan": "vendor/bin/phpstan",
+    "rector-check": "vendor/bin/rector --dry-run",
+    "rector-fix": "vendor/bin/rector"
+  },
+  "scripts-descriptions": {
+    "phpstan": "Run code analysis",
+    "rector-check": "Check Rector rules",
+    "rector-fix": "Process Rector rules"
   },
   "config": {
     "lock": false

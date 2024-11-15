@@ -3,7 +3,7 @@ name: Check
 on: [push, pull_request]
 
 jobs:
-  phpstan:
+  phpstan-and-rector:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +16,7 @@ jobs:
       - uses: ramsey/composer-install@v3
 
       - run: composer phpstan
+      - run: composer rector-check
 
   tests:
     runs-on: ubuntu-24.04
