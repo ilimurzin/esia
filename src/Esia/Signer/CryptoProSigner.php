@@ -24,10 +24,10 @@ final class CryptoProSigner implements SignerInterface
 
         $certificates = $store->get_Certificates();
         $found = $certificates->Find(CERTIFICATE_FIND_SHA1_HASH, $this->thumbprint, 0);
-        $certificate = $found->Item(1);
-        if (!$certificate) {
-            throw new SignFailException('Cannot read the certificate');
+        if ($found->Count() === 0) {
+            throw new SignFailException("Not found certificate with thumbprint $this->thumbprint");
         }
+        $certificate = $found->Item(1);
         if ($certificate->HasPrivateKey() === false) {
             throw new SignFailException('Cannot read the private key');
         }
