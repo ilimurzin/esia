@@ -18,3 +18,16 @@
 ```sh
 composer require ilimurzin/esia
 ```
+
+## Совместимость
+
+Пакет версии 3.x совместим с [fr05t1k/esia](https://github.com/fr05t1k/esia) 2.4.
+
+Для перехода на форк можно выполнить команды:
+
+```sh
+composer remove fr05t1k/esia
+composer require ilimurzin/esia:^3.2
+```
+
+При этом уже написанный код не сломается.
