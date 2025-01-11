@@ -1,12 +1,28 @@
 {
   "name": "ilimurzin/esia",
-  "license": "MIT",
   "description": "OpenID ESIA authenticating",
+  "license": "MIT",
   "keywords": [
     "esia",
     "openid",
     "egov"
   ],
+  "require": {
+    "php": "^8.2",
+    "guzzlehttp/guzzle": "^7.0",
+    "psr/http-client": "^1.0",
+    "psr/http-message": "^2.0",
+    "psr/log": "^3.0"
+  },
+  "require-dev": {
+    "codeception/codeception": "^4.2.2",
+    "codeception/module-asserts": "^1.3.1",
+    "ergebnis/composer-normalize": "^2.45",
+    "roave/security-advisories": "dev-latest"
+  },
+  "suggest": {
+    "ext-openssl": "SignerPKCS7 support"
+  },
   "autoload": {
     "psr-4": {
       "Esia\\": "src/Esia"
@@ -14,32 +30,16 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "tests\\" : "tests"
+      "tests\\": "tests"
     }
   },
-  "require": {
-    "php": "^8.2",
-    "guzzlehttp/guzzle": "^7.0",
-    "psr/log": "^3.0",
-    "psr/http-message": "^2.0",
-    "psr/http-client": "^1.0"
-  },
-  "suggest": {
-    "ext-openssl": "SignerPKCS7 support"
-  },
-  "require-dev": {
-    "roave/security-advisories": "dev-latest",
-    "codeception/codeception": "^4.2.2",
-    "codeception/module-asserts": "^1.3.1",
-    "ergebnis/composer-normalize": "^2.45"
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true
+    },
+    "lock": false
   },
   "scripts": {
     "test": "vendor/bin/codecept run"
-  },
-  "config": {
-    "lock": false,
-    "allow-plugins": {
-      "ergebnis/composer-normalize": true
-    }
   }
 }
