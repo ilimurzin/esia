@@ -16,6 +16,7 @@ jobs:
       - uses: ramsey/composer-install@v3
 
       - run: composer normalize --dry-run
+      - run: composer cs:check
       - run: composer phpstan
 
   tests:

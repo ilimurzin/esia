@@ -18,6 +18,7 @@
     "codeception/codeception": "^5.1.2",
     "codeception/module-asserts": "^3.0.0",
     "ergebnis/composer-normalize": "^2.45",
+    "friendsofphp/php-cs-fixer": "^3.67",
     "phpstan/phpstan": "^2.1",
     "roave/security-advisories": "dev-latest",
     "webmasterskaya/crypto-pro-php-stubs": "^1.0"
@@ -43,7 +44,15 @@
     "sort-packages": true
   },
   "scripts": {
+    "cs:check": "vendor/bin/php-cs-fixer check",
+    "cs:fix": "vendor/bin/php-cs-fixer fix",
     "phpstan": "vendor/bin/phpstan",
     "test": "vendor/bin/codecept run"
+  },
+  "scripts-descriptions": {
+    "cs:check": "Check code style rules",
+    "cs:fix": "Apply code style rules",
+    "phpstan": "Run code analysis",
+    "test": "Run test suite"
   }
 }
