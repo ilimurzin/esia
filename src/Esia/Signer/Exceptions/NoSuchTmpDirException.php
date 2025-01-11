@@ -2,6 +2,4 @@
 
 namespace Esia\Signer\Exceptions;
 
-class NoSuchTmpDirException extends SignFailException
-{
-}
+class NoSuchTmpDirException extends SignFailException {}

@@ -25,7 +25,7 @@ class CliSignerPKCS7 extends AbstractSignerPKCS7 implements SignerInterface
             '-inkey ' . escapeshellarg($this->privateKeyPath) . ' ' .
             '-passin ' . escapeshellarg('pass:' . $this->privateKeyPassword) . ' ' .
             '-in ' . escapeshellarg($messageFile) . ' ' .
-            '-out ' . escapeshellarg($signFile)
+            '-out ' . escapeshellarg($signFile),
         );
 
         $signed = file_get_contents($signFile);
@@ -52,7 +52,7 @@ class CliSignerPKCS7 extends AbstractSignerPKCS7 implements SignerInterface
                 ['pipe', 'w'], // stdout
                 ['pipe', 'w'], // stderr
             ],
-            $pipes
+            $pipes,
         );
 
         $result = stream_get_contents($pipes[0]);

@@ -11,7 +11,7 @@ final class CryptoProSigner implements SignerInterface
 
     public function __construct(
         string $thumbprint,
-        ?string $pin = null
+        ?string $pin = null,
     ) {
         $this->thumbprint = $thumbprint;
         $this->pin = $pin;

@@ -2,6 +2,4 @@
 
 namespace Esia\Exceptions;
 
-class OrgOidNotFoundInUrlException extends AbstractEsiaException
-{
-}
+class OrgOidNotFoundInUrlException extends AbstractEsiaException {}

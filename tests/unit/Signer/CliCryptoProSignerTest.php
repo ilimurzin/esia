@@ -23,7 +23,7 @@ class CliCryptoProSignerTest extends \Codeception\Test\Unit
         $signer = new CliCryptoProSigner(
             'cryptcp',
             '745187e5c161cd2e3130d886f9df4492fa270685',
-            'test'
+            'test',
         );
 
         $signature = $signer->sign('test');
@@ -35,7 +35,7 @@ class CliCryptoProSignerTest extends \Codeception\Test\Unit
             "openssl smime -verify -inform DER -in %s -CAfile %s -content %s",
             codecept_log_dir('signature'),
             codecept_data_dir('server.crt'),
-            codecept_log_dir('content')
+            codecept_log_dir('content'),
         );
         $output = null;
         $resultCode = null;
@@ -51,7 +51,7 @@ class CliCryptoProSignerTest extends \Codeception\Test\Unit
             '/opt/cprocsp/bin/amd64/cryptcp',
             '66821344ce484aceb984d887b303544bfdda8ea4',
             null,
-            '/'
+            '/',
         );
     }
 
@@ -63,7 +63,7 @@ class CliCryptoProSignerTest extends \Codeception\Test\Unit
             '/opt/cprocsp/bin/amd64/cryptcp',
             '66821344ce484aceb984d887b303544bfdda8ea4',
             null,
-            codecept_log_dir('non_writable_directory')
+            codecept_log_dir('non_writable_directory'),
         );
     }
 }

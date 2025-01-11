@@ -28,7 +28,7 @@ class GuzzleHttpClientTest extends Unit
     {
         $mock = new MockHandler([
             new Response(),
-            new RequestException('Error Communicating with Server', new Request('GET', 'test'))
+            new RequestException('Error Communicating with Server', new Request('GET', 'test')),
         ]);
 
         $handler = HandlerStack::create($mock);
