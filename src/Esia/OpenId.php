@@ -3,7 +3,6 @@
 namespace Esia;
 
 use Esia\Exceptions\AbstractEsiaException;
-use Esia\Exceptions\ForbiddenException;
 use Esia\Exceptions\OrgOidNotFoundInUrlException;
 use Esia\Exceptions\RequestFailException;
 use Esia\Http\GuzzleHttpClient;
@@ -13,7 +12,6 @@ use Esia\Signer\SignerInterface;
 use Esia\Signer\SignerPKCS7;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -474,15 +472,6 @@ class OpenId
             return $responseBody;
         } catch (ClientExceptionInterface $e) {
             $this->logger->error('Request was failed', ['exception' => $e]);
-            $prev = $e->getPrevious();
-
-            // Only for Guzzle
-            if ($prev instanceof BadResponseException
-                && $prev->getResponse() !== null
-                && $prev->getResponse()->getStatusCode() === 403
-            ) {
-                throw new ForbiddenException('Request is forbidden', 0, $e);
-            }
 
             throw new RequestFailException('Request is failed', 0, $e);
         } catch (RuntimeException $e) {
