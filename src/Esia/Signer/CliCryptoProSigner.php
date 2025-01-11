@@ -16,7 +16,7 @@ final class CliCryptoProSigner implements SignerInterface
         string $toolPath,
         string $thumbprint,
         ?string $pin = null,
-        ?string $tempDir = null
+        ?string $tempDir = null,
     ) {
         $this->toolPath = $toolPath;
         $this->thumbprint = $thumbprint;

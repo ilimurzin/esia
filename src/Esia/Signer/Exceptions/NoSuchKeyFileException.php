@@ -2,6 +2,4 @@
 
 namespace Esia\Signer\Exceptions;
 
-class NoSuchKeyFileException extends SignFailException
-{
-}
+class NoSuchKeyFileException extends SignFailException {}
