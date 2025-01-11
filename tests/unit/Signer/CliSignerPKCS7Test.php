@@ -12,7 +12,7 @@ class CliSignerPKCS7Test extends \Codeception\Test\Unit
             codecept_data_dir('server-gost.crt'),
             codecept_data_dir('server-gost.key'),
             'test',
-            codecept_log_dir()
+            codecept_log_dir(),
         );
 
         $signature = $signer->sign('test');
@@ -24,7 +24,7 @@ class CliSignerPKCS7Test extends \Codeception\Test\Unit
             "openssl smime -verify -inform DER -in %s -CAfile %s -content %s",
             codecept_log_dir('signature'),
             codecept_data_dir('server-gost.crt'),
-            codecept_log_dir('content')
+            codecept_log_dir('content'),
         );
         $output = null;
         $resultCode = null;

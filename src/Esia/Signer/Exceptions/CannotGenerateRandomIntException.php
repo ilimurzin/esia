@@ -2,6 +2,4 @@
 
 namespace Esia\Signer\Exceptions;
 
-class CannotGenerateRandomIntException extends SignFailException
-{
-}
+class CannotGenerateRandomIntException extends SignFailException {}

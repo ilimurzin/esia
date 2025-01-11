@@ -37,7 +37,7 @@ class SignerPKCS7Test extends Unit
             codecept_data_dir('server.crt'),
             codecept_data_dir('server.key'),
             'test',
-            codecept_log_dir()
+            codecept_log_dir(),
         );
 
         $signature = $signer->sign('test');
@@ -49,7 +49,7 @@ class SignerPKCS7Test extends Unit
             "openssl smime -verify -inform DER -in %s -CAfile %s -content %s",
             codecept_log_dir('signature'),
             codecept_data_dir('server.crt'),
-            codecept_log_dir('content')
+            codecept_log_dir('content'),
         );
         $output = null;
         $resultCode = null;
@@ -66,7 +66,7 @@ class SignerPKCS7Test extends Unit
             '/test',
             codecept_data_dir('server.key'),
             'test',
-            codecept_log_dir()
+            codecept_log_dir(),
         );
 
         $this->expectException(NoSuchCertificateFileException::class);
@@ -82,7 +82,7 @@ class SignerPKCS7Test extends Unit
             codecept_data_dir('server.crt'),
             '/test',
             'test',
-            codecept_log_dir()
+            codecept_log_dir(),
         );
 
         $this->expectException(NoSuchKeyFileException::class);
@@ -98,7 +98,7 @@ class SignerPKCS7Test extends Unit
             codecept_data_dir('server.crt'),
             codecept_data_dir('server.key'),
             'test',
-            '/'
+            '/',
         );
 
         $this->expectException(NoSuchTmpDirException::class);
@@ -114,7 +114,7 @@ class SignerPKCS7Test extends Unit
             codecept_data_dir('server.crt'),
             codecept_data_dir('server.key'),
             'test',
-            codecept_log_dir('non_writable_directory')
+            codecept_log_dir('non_writable_directory'),
         );
 
         $this->expectException(NoSuchTmpDirException::class);
@@ -130,7 +130,7 @@ class SignerPKCS7Test extends Unit
             codecept_data_dir('non_readable_file'),
             codecept_data_dir('server.key'),
             'test',
-            codecept_log_dir()
+            codecept_log_dir(),
         );
 
         $this->expectException(CannotReadCertificateException::class);
@@ -146,7 +146,7 @@ class SignerPKCS7Test extends Unit
             codecept_data_dir('server.crt'),
             codecept_data_dir('non_readable_file'),
             'test',
-            codecept_log_dir()
+            codecept_log_dir(),
         );
 
         $this->expectException(CannotReadPrivateKeyException::class);

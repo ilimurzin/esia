@@ -17,7 +17,7 @@ class CryptoProSignerTest extends \Codeception\Test\Unit
     {
         $signer = new CryptoProSigner(
             '745187e5c161cd2e3130d886f9df4492fa270685',
-            'test'
+            'test',
         );
 
         $signature = $signer->sign('test');
@@ -29,7 +29,7 @@ class CryptoProSignerTest extends \Codeception\Test\Unit
             "openssl smime -verify -inform DER -in %s -CAfile %s -content %s",
             codecept_log_dir('signature'),
             codecept_data_dir('server.crt'),
-            codecept_log_dir('content')
+            codecept_log_dir('content'),
         );
         $output = null;
         $resultCode = null;

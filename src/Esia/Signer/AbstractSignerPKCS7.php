@@ -43,7 +43,7 @@ abstract class AbstractSignerPKCS7
         string $certPath,
         string $privateKeyPath,
         ?string $privateKeyPassword,
-        string $tmpPath
+        string $tmpPath,
     ) {
         $this->certPath = $certPath;
         $this->privateKeyPath = $privateKeyPath;

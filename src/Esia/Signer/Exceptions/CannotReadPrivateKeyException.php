@@ -2,6 +2,4 @@
 
 namespace Esia\Signer\Exceptions;
 
-class CannotReadPrivateKeyException extends SignFailException
-{
-}
+class CannotReadPrivateKeyException extends SignFailException {}
