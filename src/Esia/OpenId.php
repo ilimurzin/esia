@@ -5,7 +5,6 @@ namespace Esia;
 use Esia\Exceptions\AbstractEsiaException;
 use Esia\Exceptions\OrgOidNotFoundInUrlException;
 use Esia\Exceptions\RequestFailException;
-use Esia\Http\GuzzleHttpClient;
 use Esia\Signer\Exceptions\CannotGenerateRandomIntException;
 use Esia\Signer\Exceptions\SignFailException;
 use Esia\Signer\SignerInterface;
@@ -37,7 +36,7 @@ class OpenId
         ?SignerInterface $signer = null,
     ) {
         $this->config = $config;
-        $this->client = $client ?? new GuzzleHttpClient(new Client());
+        $this->client = $client ?? new Client();
         $this->logger = $logger ?? new NullLogger();
         $this->signer = $signer ?? new SignerPKCS7(
             $config->getCertPath(),

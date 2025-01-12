@@ -7,7 +7,6 @@ use Esia\Config;
 use Esia\Exceptions\AbstractEsiaException;
 use Esia\Exceptions\InvalidConfigurationException;
 use Esia\Exceptions\OrgOidNotFoundInUrlException;
-use Esia\Http\GuzzleHttpClient;
 use Esia\OpenId;
 use Esia\Signer\Exceptions\SignFailException;
 use GuzzleHttp\Client;
@@ -327,8 +326,7 @@ JSON,
         $mock = new MockHandler($responses);
 
         $handler = HandlerStack::create($mock);
-        $guzzleClient = new Client(['handler' => $handler]);
 
-        return new GuzzleHttpClient($guzzleClient);
+        return new Client(['handler' => $handler]);
     }
 }
