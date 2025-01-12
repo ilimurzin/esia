@@ -29,13 +29,15 @@ class OpenIdCliOpensslTest extends OpenIdTest
 
         $config = new Config($this->config);
 
-        $this->openId = new OpenId($config);
-        $this->openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $this->openId = new OpenId(
+            config: $config,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
     }
 
     /**
@@ -50,13 +52,16 @@ class OpenIdCliOpensslTest extends OpenIdTest
         $client = $this->buildClientWithResponses([
             new Response(200, [], '{"access_token": "test.' . $oidBase64 . '.test", "refresh_token":"not_important"}'),
         ]);
-        $openId = new OpenId($config, $client);
-        $openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $openId = new OpenId(
+            config: $config,
+            client: $client,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
 
         $token = $openId->getToken('test');
 
@@ -73,13 +78,16 @@ class OpenIdCliOpensslTest extends OpenIdTest
         $client = $this->buildClientWithResponses([
             new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "' . $refreshToken . '"}'),
         ]);
-        $openId = new OpenId($config, $client);
-        $openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $openId = new OpenId(
+            config: $config,
+            client: $client,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
 
         $openId->getToken('test');
         self::assertSame($refreshToken, $openId->getConfig()->getRefreshToken());
@@ -91,13 +99,16 @@ class OpenIdCliOpensslTest extends OpenIdTest
         $client = $this->buildClientWithResponses([
             new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "first"}'),
         ]);
-        $openId = new OpenId($config, $client);
-        $openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $openId = new OpenId(
+            config: $config,
+            client: $client,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
 
         $openId->refreshToken();
 
@@ -111,13 +122,16 @@ class OpenIdCliOpensslTest extends OpenIdTest
             new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "first"}'),
             new Response(200, [], '{"access_token": "test.' . base64_encode('{"urn:esia:sbj_id": 123}') . '.test", "refresh_token": "second"}'),
         ]);
-        $openId = new OpenId($config, $client);
-        $openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $openId = new OpenId(
+            config: $config,
+            client: $client,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
 
         $openId->refreshToken();
         $first = $openId->getConfig()->getRefreshToken();
@@ -133,13 +147,16 @@ class OpenIdCliOpensslTest extends OpenIdTest
         $client = $this->buildClientWithResponses([
             new Response(200, [], '{"access_token": "not_empty"}'),
         ]);
-        $openId = new OpenId($config, $client);
-        $openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $openId = new OpenId(
+            config: $config,
+            client: $client,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
 
         $token = $openId->getTokenWithClientCredentials([
             'org_shortname?org_oid=1002416012',
@@ -161,13 +178,16 @@ class OpenIdCliOpensslTest extends OpenIdTest
             new Response(200, [], '{"access_token": "client_credentials_token"}'),
             new Response(200, [], '{"stateFacts":["Identifiable"],"oid":1002416012,"ogrn":"319290100017299","inn":"290136958241","leg":"","isLiquidated":false,"eTag":"656620472844B6421FE4DA6DFAD521755158F9E4"}'),
         ]);
-        $openId = new OpenId($config, $client);
-        $openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $openId = new OpenId(
+            config: $config,
+            client: $client,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
 
         $organizations = $openId->getOrganizations(['org_ogrn', 'org_inn']);
 
@@ -185,13 +205,16 @@ class OpenIdCliOpensslTest extends OpenIdTest
             new Response(200, [], '{"access_token": "client_credentials_token"}'),
             new Response(200, [], '{"stateFacts":["Identifiable"],"oid":1002416012,"ogrn":"319290100017299","inn":"290136958241","leg":"","isLiquidated":false,"eTag":"656620472844B6421FE4DA6DFAD521755158F9E4"}'),
         ]);
-        $openId = new OpenId($config, $client);
-        $openId->setSigner(new CliSignerPKCS7(
-            $this->config['certPath'],
-            $this->config['privateKeyPath'],
-            $this->config['privateKeyPassword'],
-            $this->config['tmpPath'],
-        ));
+        $openId = new OpenId(
+            config: $config,
+            client: $client,
+            signer: new CliSignerPKCS7(
+                $this->config['certPath'],
+                $this->config['privateKeyPath'],
+                $this->config['privateKeyPassword'],
+                $this->config['tmpPath'],
+            ),
+        );
 
         self::expectException(OrgOidNotFoundInUrlException::class);
 

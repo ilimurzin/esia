@@ -45,17 +45,6 @@ class OpenId
         );
     }
 
-    /**
-     * Replace default signer
-     */
-    public function setSigner(SignerInterface $signer): void
-    {
-        $this->signer = $signer;
-    }
-
-    /**
-     * Get config
-     */
     public function getConfig(): Config
     {
         return $this->config;
