@@ -22,31 +22,13 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RuntimeException;
 
-/**
- * Class OpenId
- */
 class OpenId
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var SignerInterface
-     */
-    private $signer;
-
-    /**
-     * Http Client
-     *
-     * @var ClientInterface
-     */
-    private $client;
-
-    /**
-     * Config
-     *
-     * @var Config
-     */
-    private $config;
+    private SignerInterface $signer;
+    private ClientInterface $client;
+    private Config $config;
 
     public function __construct(
         Config $config,
