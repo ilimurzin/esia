@@ -17,7 +17,6 @@ use InvalidArgumentException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
-use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RuntimeException;
@@ -27,7 +26,7 @@ use RuntimeException;
  */
 class OpenId
 {
-    use LoggerAwareTrait;
+    private LoggerInterface $logger;
 
     /**
      * @var SignerInterface
