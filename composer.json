@@ -47,7 +47,7 @@
     "cs:check": "vendor/bin/php-cs-fixer check",
     "cs:fix": "vendor/bin/php-cs-fixer fix",
     "phpstan": "vendor/bin/phpstan",
-    "test": "chmod 000 tests/_data/non_readable_file && vendor/bin/codecept run && chmod 644 tests/_data/non_readable_file"
+    "test": "vendor/bin/codecept run"
   },
   "scripts-descriptions": {
     "cs:check": "Check code style rules",
