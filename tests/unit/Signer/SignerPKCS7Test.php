@@ -18,6 +18,16 @@ use Esia\Signer\SignerPKCS7;
  */
 class SignerPKCS7Test extends Unit
 {
+    protected function setUp(): void
+    {
+        chmod(codecept_data_dir('non_readable_file'), 0044);
+    }
+
+    protected function tearDown(): void
+    {
+        chmod(codecept_data_dir('non_readable_file'), 0644);
+    }
+
     /**
      * @throws SignFailException
      */
