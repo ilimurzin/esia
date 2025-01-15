@@ -40,8 +40,21 @@ class SignerPKCS7Test extends Unit
             codecept_log_dir()
         );
 
-        $sign = $signer->sign('test');
-        self::assertNotEmpty($sign);
+        $signature = $signer->sign('test');
+
+        file_put_contents(codecept_log_dir('content'), 'test');
+        $signature = base64_decode(strtr($signature, '-_', '+/'));
+        file_put_contents(codecept_log_dir('signature'), $signature);
+        $command = sprintf(
+            "openssl smime -verify -inform DER -in %s -CAfile %s -content %s",
+            codecept_log_dir('signature'),
+            codecept_data_dir('server.crt'),
+            codecept_log_dir('content')
+        );
+        $output = null;
+        $resultCode = null;
+        exec($command, $output, $resultCode);
+        self::assertEquals(0, $resultCode, 'OpenSSL verification failure');
     }
 
     /**
