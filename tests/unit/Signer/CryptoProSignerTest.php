@@ -2,9 +2,10 @@
 
 namespace tests\unit\Signer;
 
+use Codeception\Test\Unit;
 use Esia\Signer\CryptoProSigner;
 
-class CryptoProSignerTest extends \Codeception\Test\Unit
+class CryptoProSignerTest extends Unit
 {
     protected function setUp(): void
     {
@@ -16,24 +17,21 @@ class CryptoProSignerTest extends \Codeception\Test\Unit
     public function testSign(): void
     {
         $signer = new CryptoProSigner(
-            '745187e5c161cd2e3130d886f9df4492fa270685',
-            'test',
+            '2d6e18176b1512b2bc782f884ecf65fb3d5cba8b',
+            '1xqoyc4e',
         );
 
         $signature = $signer->sign('test');
 
-        file_put_contents(codecept_log_dir('content'), 'test');
-        $signature = base64_decode(strtr($signature, '-_', '+/'));
-        file_put_contents(codecept_log_dir('signature'), $signature);
-        $command = sprintf(
-            "openssl smime -verify -inform DER -in %s -CAfile %s -content %s",
-            codecept_log_dir('signature'),
-            codecept_data_dir('server.crt'),
-            codecept_log_dir('content'),
+        self::assertEquals(
+            1,
+            openssl_verify(
+                'test',
+                base64_decode(strtr($signature, '-_', '+/')),
+                file_get_contents(codecept_data_dir('cert_otvconba/certs/otvconba.cer')),
+                'md_gost12_256',
+            ),
+            'OpenSSL verification failure',
         );
-        $output = null;
-        $resultCode = null;
-        exec($command, $output, $resultCode);
-        self::assertEquals(0, $resultCode, 'OpenSSL verification failure');
     }
 }

@@ -2,20 +2,15 @@
 
 namespace Esia\Signer;
 
-use Esia\Signer\Exceptions\SignFailException;
+use Esia\Signer\Exceptions\SignException;
 
-final class CryptoProSigner implements SignerInterface
+final readonly class CryptoProSigner implements SignerInterface
 {
-    private $thumbprint;
-    private $pin;
-
     public function __construct(
-        string $thumbprint,
-        ?string $pin = null,
-    ) {
-        $this->thumbprint = $thumbprint;
-        $this->pin = $pin;
-    }
+        private string $thumbprint,
+        #[\SensitiveParameter]
+        private ?string $pin = null,
+    ) {}
 
     public function sign(string $message): string
     {
@@ -25,23 +20,36 @@ final class CryptoProSigner implements SignerInterface
         $certificates = $store->get_Certificates();
         $found = $certificates->Find(CERTIFICATE_FIND_SHA1_HASH, $this->thumbprint, 0);
         if ($found->Count() === 0) {
-            throw new SignFailException("Not found certificate with thumbprint $this->thumbprint");
+            throw new SignException("Not found certificate with thumbprint $this->thumbprint");
         }
         $certificate = $found->Item(1);
         if ($certificate->HasPrivateKey() === false) {
-            throw new SignFailException('Cannot read the private key');
+            throw new SignException('Cannot read the private key');
         }
 
-        $signer = new \CPSigner();
-        $signer->set_Certificate($certificate);
         if ($this->pin) {
-            $signer->set_KeyPin($this->pin);
+            $certificate->PrivateKey()->set_KeyPin($this->pin);
         }
 
-        $sd = new \CPSignedData();
-        $sd->set_ContentEncoding(BASE64_TO_BINARY);
-        $sd->set_Content(base64_encode($message));
+        $hashedData = new \CPHashedData();
+        $hashedData->set_Algorithm(\CADESCOM_HASH_ALGORITHM_CP_GOST_3411_2012_256);
+        $hashedData->set_DataEncoding(\BASE64_TO_BINARY);
+        $hashedData->Hash(base64_encode($message));
 
-        return $sd->SignCades($signer, CADES_BES, true, ENCODE_BASE64);
+        $rawSignature = new \CPRawSignature();
+
+        // https://docs.cryptopro.ru/cades/reference/cadescom/cadescom_interface/irawsignaturesignhash
+        $signature = $rawSignature->SignHash($hashedData, $certificate);
+
+        // https://digital.gov.ru/ru/documents/6186/: развернуть зеркально, побайтово, полученную подпись
+        $signature = strrev(hex2bin($signature));
+
+        // https://digital.gov.ru/ru/documents/6186/: закодировать полученное значение в base64 url safe
+        return $this->urlSafe(base64_encode($signature));
+    }
+
+    private function urlSafe(string $string): string
+    {
+        return rtrim(strtr(trim($string), '+/', '-_'), '=');
     }
 }

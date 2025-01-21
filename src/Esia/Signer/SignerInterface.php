@@ -2,12 +2,12 @@
 
 namespace Esia\Signer;
 
-use Esia\Signer\Exceptions\SignFailException;
+use Esia\Signer\Exceptions\SignException;
 
 interface SignerInterface
 {
     /**
-     * @throws SignFailException
+     * @throws SignException
      */
     public function sign(string $message): string;
 }

@@ -4,20 +4,22 @@ namespace Esia\Signer;
 
 use Esia\Signer\Exceptions\SignException;
 
-final readonly class CliCryptoProSigner implements SignerInterface
+final readonly class CliOpenSSLSigner implements SignerInterface
 {
     public function __construct(
-        private string $container,
+        private string $privateKeyPath,
         #[\SensitiveParameter]
-        private ?string $password = null,
-        private ?string $toolPath = 'csptest',
+        private ?string $privateKeyPassword = null,
         private ?string $tempDir = null,
     ) {}
 
+    /**
+     * @throws SignException
+     */
     public function sign(string $message): string
     {
-        $messageFilePath = tempnam($this->tempDir ?? sys_get_temp_dir(), 'cprocsp');
-        $signatureFilePath = tempnam($this->tempDir ?? sys_get_temp_dir(), 'cprocsp');
+        $messageFilePath = tempnam($this->tempDir ?? sys_get_temp_dir(), 'openssl');
+        $signatureFilePath = tempnam($this->tempDir ?? sys_get_temp_dir(), 'openssl');
 
         file_put_contents($messageFilePath, $message);
 
@@ -28,20 +30,19 @@ final readonly class CliCryptoProSigner implements SignerInterface
             unlink($signatureFilePath);
         }
 
-        // https://digital.gov.ru/ru/documents/6186/: развернуть зеркально, побайтово, полученную подпись
-        $signature = strrev($signature);
-
         // https://digital.gov.ru/ru/documents/6186/: закодировать полученное значение в base64 url safe
         return $this->urlSafe(base64_encode($signature));
     }
 
     private function signFile(string $messageFilePath, string $signatureFilePath): string
     {
-        $command = "$this->toolPath -keyset -sign GOST12_256 -container $this->container -keytype exchange -in $messageFilePath -out $signatureFilePath";
+        $command = "openssl dgst -sign $this->privateKeyPath -out $signatureFilePath";
 
-        if ($this->password) {
-            $command .= " -password $this->password";
+        if ($this->privateKeyPassword) {
+            $command .= " -passin pass:$this->privateKeyPassword";
         }
+
+        $command .= " $messageFilePath";
 
         $output = null;
         $resultCode = null;

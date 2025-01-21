@@ -1,12 +1,7 @@
 {
   "name": "ilimurzin/esia",
-  "description": "OpenID ESIA authenticating",
+  "description": "Пакет для входа через Госуслуги",
   "license": "MIT",
-  "keywords": [
-    "esia",
-    "openid",
-    "egov"
-  ],
   "require": {
     "php": "^8.2",
     "guzzlehttp/guzzle": "^7.0",
@@ -21,11 +16,14 @@
     "friendsofphp/php-cs-fixer": "^3.67",
     "phpstan/phpstan": "^2.1",
     "roave/security-advisories": "dev-latest",
-    "webmasterskaya/crypto-pro-php-stubs": "^1.0"
+    "webmasterskaya/crypto-pro-php-stubs": "dev-for-ilimurzin-esia"
   },
-  "suggest": {
-    "ext-openssl": "SignerPKCS7 support"
-  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/ilimurzin/crypto-pro-php-stubs.git"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Esia\\": "src/Esia"
