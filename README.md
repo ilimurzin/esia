@@ -1,6 +1,6 @@
 # esia
 
-[![Tests Status](https://github.com/ilimurzin/esia/actions/workflows/tests.yml/badge.svg)](https://github.com/ilimurzin/esia/actions/workflows/tests.yml)
+[![Workflow status](https://github.com/ilimurzin/esia/actions/workflows/check.yml/badge.svg)](https://github.com/ilimurzin/esia/actions/workflows/check.yml)
 
 Пакет для [входа через Госуслуги](https://partners.gosuslugi.ru/catalog/esia).
 Поддерживается в двух версиях: 3.x и 4.x.
