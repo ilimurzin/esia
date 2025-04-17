@@ -3,9 +3,15 @@
 [![Workflow status](https://github.com/ilimurzin/esia/actions/workflows/check.yml/badge.svg)](https://github.com/ilimurzin/esia/actions/workflows/check.yml)
 
 Пакет для [входа через Госуслуги](https://partners.gosuslugi.ru/catalog/esia).
+
 Поддерживается в двух версиях: 3.x и 4.x.
 Пакет версии 3.x обратно совместим с [fr05t1k/esia](https://github.com/fr05t1k/esia) 2.4.
 Пакет версии 4.x несовместим с предыдущими версиями, но поддерживает новые эндпоинты ЕСИА: v2/ac и v3/te.
+
+Для работы пакета понадобится КриптоПро или OpenSSL с поддержкой ГОСТ.
+
+Пакет [нельзя](https://habr.com/ru/articles/888000/) использовать для новых систем из-за [изменений в регламенте](https://t.me/esiainfo/4) ЕСИА.
+Информационные системы, уже подключенные к ЕСИА, могут использовать пакет [до 31 декабря 2026 года](https://t.me/esiainfo/4?comment=25).
 
 ## 4.x
 
