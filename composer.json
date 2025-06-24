@@ -16,14 +16,8 @@
     "friendsofphp/php-cs-fixer": "^3.67",
     "phpstan/phpstan": "^2.1",
     "roave/security-advisories": "dev-latest",
-    "webmasterskaya/crypto-pro-php-stubs": "dev-for-ilimurzin-esia"
+    "webmasterskaya/crypto-pro-php-stubs": "^1.0.6"
   },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/ilimurzin/crypto-pro-php-stubs.git"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "Esia\\": "src/Esia"
