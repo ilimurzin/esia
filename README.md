@@ -11,7 +11,8 @@
 Для работы пакета понадобится КриптоПро или OpenSSL с поддержкой ГОСТ.
 
 Пакет [нельзя](https://habr.com/ru/articles/888000/) использовать для новых систем из-за [изменений в регламенте](https://t.me/esiainfo/4) ЕСИА.
-Информационные системы, уже подключенные к ЕСИА, могут использовать пакет [до 31 декабря 2026 года](https://t.me/esiainfo/4?comment=25).
+Информационные системы, уже подключенные к ЕСИА, могут использовать пакет [до 31 декабря 2026 года](https://digital.gov.ru/documents/reglament-informaczionnogo-vzaimodejstviya-esia).
+Новые системы могут использовать типовые технические решения, указанные в [методических рекомендациях](https://digital.gov.ru/documents/metodicheskie-rekomendaczii-po-ispolzovaniyu-esia).
 
 ## 4.x
 
@@ -24,7 +25,7 @@ composer require ilimurzin/esia
 ### Использование
 
 Пакет использует модель контроля на основе делегированного принятия решения.
-Подробнее в [методических рекомендациях](https://digital.gov.ru/ru/documents/6186/).
+Подробнее в [методических рекомендациях](https://digital.gov.ru/documents/metodicheskie-rekomendaczii-po-ispolzovaniyu-esia).
 
 ```php
 $config = new \Esia\Config(
