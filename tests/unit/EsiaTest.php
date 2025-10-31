@@ -60,7 +60,6 @@ class EsiaTest extends Unit
 
     public function testGetToken(): void
     {
-        $refreshToken = '587253d9-21ae-4f32-b20e-d0542c99e09d';
         $tokenType = 'Bearer';
         $expiresIn = 3600;
         $oid = 1000719157;
@@ -72,7 +71,6 @@ class EsiaTest extends Unit
                         'urn:esia:sbj_id' => $oid,
                         'client_id' => $clientId,
                     ],
-                    refreshToken: $refreshToken,
                     tokenType: $tokenType,
                     expiresIn: $expiresIn,
                 ),
@@ -81,7 +79,6 @@ class EsiaTest extends Unit
 
         $token = $esia->getToken('test');
 
-        self::assertSame($refreshToken, $token->refreshToken);
         self::assertSame($tokenType, $token->tokenType);
         self::assertSame($expiresIn, $token->expiresIn);
         self::assertSame($oid, $token->getOid());
@@ -98,21 +95,26 @@ class EsiaTest extends Unit
 
     private function buildTokenResponse(
         array $payload,
-        string $refreshToken = '587253d9-21ae-4f32-b20e-d0542c99e09d',
+        ?string $refreshToken = null,
         string $tokenType = 'Bearer',
         int $expiresIn = 3600,
     ): callable {
         return function (RequestInterface $request) use ($payload, $refreshToken, $tokenType, $expiresIn) {
             parse_str((string) $request->getBody(), $decodedBody);
 
+            $body = [
+                'access_token' => 'eyJ2ZX.' . base64_encode(json_encode($payload)) . '.eyJ2ZX',
+                'state' => $decodedBody['state'],
+                'token_type' => $tokenType,
+                'expires_in' => $expiresIn,
+            ];
+
+            if ($refreshToken) {
+                $body['refresh_token'] = $refreshToken;
+            }
+
             return new Response(
-                body: json_encode([
-                    'access_token' => 'eyJ2ZX.' . base64_encode(json_encode($payload)) . '.eyJ2ZX',
-                    'refresh_token' => $refreshToken,
-                    'state' => $decodedBody['state'],
-                    'token_type' => $tokenType,
-                    'expires_in' => $expiresIn,
-                ]),
+                body: json_encode($body),
             );
         };
     }

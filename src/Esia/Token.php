@@ -11,7 +11,7 @@ final readonly class Token
         public int $expiresIn,
         public string $state,
         public string $tokenType,
-        public string $refreshToken,
+        public ?string $refreshToken = null,
     ) {}
 
     public static function fromResponseBody(string $response): self
@@ -27,7 +27,7 @@ final readonly class Token
             $response->expires_in,
             $response->state,
             $response->token_type,
-            $response->refresh_token,
+            $response->refresh_token ?? null,
         );
     }
 
