@@ -58,7 +58,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['tmpPath']
         ));
 
-        $token = $openId->getToken('test');
+        $token = $openId->getAccessToken('test');
 
         self::assertNotEmpty($token);
         self::assertSame($oid, $openId->getConfig()->getOid());
@@ -81,7 +81,7 @@ class OpenIdCliOpensslTest extends OpenIdTest
             $this->config['tmpPath']
         ));
 
-        $openId->getToken('test');
+        $openId->getAccessToken('test');
         self::assertSame($refreshToken, $openId->getConfig()->getRefreshToken());
     }
 

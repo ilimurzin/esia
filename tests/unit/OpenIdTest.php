@@ -60,7 +60,7 @@ class OpenIdTest extends Unit
         ]);
         $openId = new OpenId($config, $client);
 
-        $token = $openId->getToken('test');
+        $token = $openId->getAccessToken('test');
 
         self::assertNotEmpty($token);
         self::assertSame($oid, $openId->getConfig()->getOid());
@@ -77,7 +77,7 @@ class OpenIdTest extends Unit
         ]);
         $openId = new OpenId($config, $client);
 
-        $openId->getToken('test');
+        $openId->getAccessToken('test');
         self::assertSame($refreshToken, $openId->getConfig()->getRefreshToken());
     }
 

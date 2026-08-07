@@ -5,6 +5,7 @@ namespace Esia;
 use Esia\Exceptions\AbstractEsiaException;
 use Esia\Exceptions\ForbiddenException;
 use Esia\Exceptions\OrgOidNotFoundInUrlException;
+use Esia\Exceptions\PermissionsUrlNotFoundInAccessTokenException;
 use Esia\Exceptions\RequestFailException;
 use Esia\Http\GuzzleHttpClient;
 use Esia\Signer\Exceptions\CannotGenerateRandomIntException;
@@ -151,7 +152,7 @@ class OpenId
      * @throws SignFailException
      * @throws AbstractEsiaException
      */
-    public function getToken(string $code): string
+    public function getAccessToken(string $code): string
     {
         $timestamp = $this->getTimeStamp();
         $state = $this->buildState();
@@ -427,6 +428,28 @@ class OpenId
         }
 
         return $organizations;
+    }
+
+    /**
+     * Fetch issued permissions using the permissions_url from the access token.
+     *
+     * @throws AbstractEsiaException
+     */
+    public function getPermissionsByAccessToken(string $token): array
+    {
+        $chunks = explode('.', $token);
+        $payload = json_decode($this->base64UrlSafeDecode($chunks[1]), true);
+
+        if (empty($payload['permissions_url'])) {
+            throw new PermissionsUrlNotFoundInAccessTokenException('permissions_url is missing from the access token');
+        }
+
+        return $this->sendRequest(
+            new Request(
+                'GET',
+                $payload['permissions_url']
+            )
+        )['elements'] ?? [];
     }
 
     /**
