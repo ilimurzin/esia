@@ -196,8 +196,7 @@ class OpenId
         }
 
         # get object id from token
-        $chunks = explode('.', $token);
-        $payload = json_decode(self::base64UrlSafeDecode($chunks[1]), true);
+        $payload = self::getPayloadFromAccessToken($token);
         $this->config->setOid($payload['urn:esia:sbj_id']);
 
         return $token;
@@ -245,8 +244,7 @@ class OpenId
         $this->config->setRefreshToken($payload['refresh_token']);
 
         # get object id from token
-        $chunks = explode('.', $token);
-        $payload = json_decode(self::base64UrlSafeDecode($chunks[1]), true);
+        $payload = self::getPayloadFromAccessToken($token);
         $this->config->setOid($payload['urn:esia:sbj_id']);
 
         return $token;
@@ -431,14 +429,13 @@ class OpenId
     }
 
     /**
-     * Fetch issued permissions using the permissions_url from the access token.
+     * Fetch issued permissions using the permissions_url from the access token
      *
      * @throws AbstractEsiaException
      */
     public function getPermissionsByAccessToken(string $token): array
     {
-        $chunks = explode('.', $token);
-        $payload = json_decode(self::base64UrlSafeDecode($chunks[1]), true);
+        $payload = self::getPayloadFromAccessToken($token);
 
         if (empty($payload['permissions_url'])) {
             throw new PermissionsUrlNotFoundInAccessTokenException('permissions_url is missing from the access token');
@@ -450,6 +447,19 @@ class OpenId
                 $payload['permissions_url']
             )
         )['elements'] ?? [];
+    }
+
+    /**
+     * Extracts and decodes the payload from the access token
+     *
+     * @param string $token
+     * @return array
+     */
+    public static function getPayloadFromAccessToken(string $token): array
+    {
+        $chunks = explode('.', $token);
+
+        return json_decode(self::base64UrlSafeDecode($chunks[1]), true);
     }
 
     /**
