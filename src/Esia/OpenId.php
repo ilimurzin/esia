@@ -5,6 +5,7 @@ namespace Esia;
 use Esia\Exceptions\AbstractEsiaException;
 use Esia\Exceptions\ForbiddenException;
 use Esia\Exceptions\OrgOidNotFoundInUrlException;
+use Esia\Exceptions\PermissionsUrlNotFoundInAccessTokenException;
 use Esia\Exceptions\RequestFailException;
 use Esia\Http\GuzzleHttpClient;
 use Esia\Signer\Exceptions\CannotGenerateRandomIntException;
@@ -195,8 +196,7 @@ class OpenId
         }
 
         # get object id from token
-        $chunks = explode('.', $token);
-        $payload = json_decode($this->base64UrlSafeDecode($chunks[1]), true);
+        $payload = self::getPayloadFromAccessToken($token);
         $this->config->setOid($payload['urn:esia:sbj_id']);
 
         return $token;
@@ -244,8 +244,7 @@ class OpenId
         $this->config->setRefreshToken($payload['refresh_token']);
 
         # get object id from token
-        $chunks = explode('.', $token);
-        $payload = json_decode($this->base64UrlSafeDecode($chunks[1]), true);
+        $payload = self::getPayloadFromAccessToken($token);
         $this->config->setOid($payload['urn:esia:sbj_id']);
 
         return $token;
@@ -430,6 +429,40 @@ class OpenId
     }
 
     /**
+     * Fetch issued permissions using the permissions_url from the access token
+     *
+     * @throws AbstractEsiaException
+     */
+    public function getPermissionsByAccessToken(string $token): array
+    {
+        $payload = self::getPayloadFromAccessToken($token);
+
+        if (empty($payload['permissions_url'])) {
+            throw new PermissionsUrlNotFoundInAccessTokenException('permissions_url is missing from the access token');
+        }
+
+        return $this->sendRequest(
+            new Request(
+                'GET',
+                $payload['permissions_url']
+            )
+        )['elements'] ?? [];
+    }
+
+    /**
+     * Extracts and decodes the payload from the access token
+     *
+     * @param string $token
+     * @return array
+     */
+    public static function getPayloadFromAccessToken(string $token): array
+    {
+        $chunks = explode('.', $token);
+
+        return json_decode(self::base64UrlSafeDecode($chunks[1]), true);
+    }
+
+    /**
      * This method can iterate on each element
      * and fetch entities from esia by url
      *
@@ -528,7 +561,7 @@ class OpenId
     /**
      * Url safe for base64
      */
-    private function base64UrlSafeDecode(string $string): string
+    private static function base64UrlSafeDecode(string $string): string
     {
         $base64 = strtr($string, '-_', '+/');
 
