@@ -152,7 +152,7 @@ class OpenId
      * @throws SignFailException
      * @throws AbstractEsiaException
      */
-    public function getAccessToken(string $code): string
+    public function getToken(string $code): string
     {
         $timestamp = $this->getTimeStamp();
         $state = $this->buildState();
